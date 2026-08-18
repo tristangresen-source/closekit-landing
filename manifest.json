@@ -1,0 +1,18 @@
+{
+  "name": "CloseKit",
+  "short_name": "CloseKit",
+  "description": "Real estate transaction automation for agents",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1B5E3B",
+  "theme_color": "#1B5E3B",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

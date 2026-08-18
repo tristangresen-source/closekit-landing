@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CloseKit — Real estate paperwork, handled.</title>
+  <meta name="description" content="Represent the seller, the buyer, or both. CloseKit builds your Florida real estate forms from the deal's real terms, collects every signature, and tracks the transaction to closing." />
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" href="/icon.svg" type="image/svg+xml">
+  <meta name="theme-color" content="#1B5E3B">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="CloseKit">
+  <link rel="apple-touch-icon" href="/icon.svg">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:           #0A0A0A;
+      --surface:      #111111;
+      --surface-2:    #161616;
+      --border:       rgba(255,255,255,0.08);
+      --green:        #1B5E3B;
+      --green-bright: #22C55E;
+      --green-soft:   #5DBA85;
+      --green-dark:   #0A1F12;
+      --white:        #FFFFFF;
+      --gray:         #A0A0A0;
+      --gray-dim:     #606060;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--white);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    body.no-scroll { overflow: hidden; }
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+    /* ── INTRO SCREEN ───────────────────────────────────────── */
+    #intro-screen {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      transition: opacity 0.7s ease;
+    }
+    #intro-screen.fade-out { opacity: 0; pointer-events: none; }
+    .intro-icon {
+      width: 96px; height: 96px;
+      opacity: 0;
+      transform: scale(0.85);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .intro-icon.show { opacity: 1; transform: scale(1); }
+
+    /* ── TYPED CURSOR ───────────────────────────────────────── */
+    .typed-cursor {
+      display: inline-block;
+      width: 4px; height: 0.85em;
+      background: var(--green-bright);
+      margin-left: 4px;
+      vertical-align: middle;
+      animation: blink 0.9s step-end infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+    /* Nav fades in after intro completes */
+    nav {
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+    nav.show { opacity: 1; }
+
+    /* ── NAV ────────────────────────────────────────────────── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10,10,10,0.85);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 0;
+    }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none;
+    }
+    .nav-logo-dot {
+      width: 12px; height: 12px;
+      background: var(--green-bright);
+      border-radius: 50%;
+      box-shadow: 0 0 14px rgba(34,197,94,0.55);
+    }
+    .nav-logo-text {
+      font-size: 1.1rem; font-weight: 800;
+      letter-spacing: -0.03em; color: var(--white);
+    }
+    .nav-links { display: flex; align-items: center; gap: 28px; }
+    .nav-links a {
+      font-size: 0.86rem; font-weight: 500;
+      color: var(--gray); text-decoration: none;
+      transition: color 0.15s;
+    }
+    .nav-links a:hover { color: var(--white); }
+    .btn-signin {
+      background: transparent; color: var(--green-bright);
+      border: 1px solid var(--green-bright); border-radius: 8px;
+      padding: 9px 18px; font-size: 0.85rem; font-weight: 700;
+      text-decoration: none;
+      transition: background 0.15s, color 0.15s, transform 0.15s;
+    }
+    .btn-signin:hover {
+      background: var(--green-bright); color: #000;
+      transform: translateY(-1px);
+    }
+
+    /* ── HERO ───────────────────────────────────────────────── */
+    .hero {
+      min-height: 88vh;
+      display: flex; align-items: center; justify-content: center;
+      text-align: center;
+      padding: 90px 0 80px;
+      position: relative; overflow: hidden;
+    }
+    .hero-glow {
+      position: absolute;
+      top: 40%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 880px; height: 600px;
+      background: radial-gradient(ellipse, rgba(27,94,59,0.22) 0%, transparent 68%);
+      pointer-events: none;
+    }
+    .hero-content { position: relative; z-index: 1; max-width: 880px; margin: 0 auto; }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(34,197,94,0.1);
+      color: var(--green-bright);
+      font-size: 0.66rem; font-weight: 700;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      padding: 5px 14px; border-radius: 20px;
+      border: 1px solid rgba(34,197,94,0.22);
+      margin-bottom: 30px;
+    }
+    .hero h1 {
+      font-size: clamp(40px, 7vw, 78px);
+      font-weight: 800; line-height: 1.05;
+      letter-spacing: -0.03em; color: var(--white);
+      margin-bottom: 22px;
+    }
+    .hero h1 .green { color: var(--green-bright); }
+    .hero-sub {
+      font-size: clamp(15px, 1.6vw, 19px);
+      color: var(--gray);
+      max-width: 620px; margin: 0 auto 38px;
+      line-height: 1.7;
+    }
+    .btn-primary {
+      background: var(--green-bright); color: #000;
+      border: none; border-radius: 10px;
+      padding: 16px 32px; font-size: 0.95rem; font-weight: 700;
+      cursor: pointer; font-family: inherit;
+      text-decoration: none; display: inline-block;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 26px rgba(34,197,94,0.4);
+    }
+    .hero-mini-note {
+      font-size: 13px; color: var(--gray-dim);
+      margin-top: 14px;
+    }
+
+    /* ── SECTION HEADERS ────────────────────────────────────── */
+    .section-label {
+      font-size: 0.66rem; font-weight: 700;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--green-bright); margin-bottom: 14px;
+    }
+    .section-headline {
+      font-size: clamp(26px, 4vw, 44px);
+      font-weight: 800; letter-spacing: -0.025em;
+      color: var(--white); line-height: 1.12; margin-bottom: 18px;
+    }
+    .section-sub {
+      font-size: 1rem; color: var(--gray); line-height: 1.7; max-width: 580px;
+    }
+
+    /* ── HOW IT WORKS ───────────────────────────────────────── */
+    .how-section {
+      padding: 100px 0;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .how-header { margin-bottom: 60px; text-align: center; }
+    .steps-grid {
+      display: grid; grid-template-columns: 1fr 1fr 1fr;
+    }
+    .step-card {
+      padding: 40px 32px;
+      border-right: 1px solid var(--border);
+    }
+    .step-card:last-child { border-right: none; }
+    .step-num-big {
+      font-size: 4rem; font-weight: 800;
+      color: rgba(34,197,94,0.12);
+      letter-spacing: -0.04em;
+      display: block; margin-bottom: 16px; line-height: 1;
+    }
+    .step-card h3 {
+      font-size: 1.12rem; font-weight: 700;
+      color: var(--white); margin-bottom: 10px;
+    }
+    .step-card p { font-size: 0.9rem; color: var(--gray); line-height: 1.65; }
+
+    /* ── BOTH SIDES ─────────────────────────────────────────── */
+    .sides-section { padding: 110px 0; }
+    .sides-header { margin-bottom: 56px; text-align: center; }
+    .sides-header .section-sub { margin: 0 auto; }
+    .sides-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+    }
+    .side-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px; padding: 32px 28px;
+    }
+    .side-tag {
+      display: inline-block;
+      font-size: 0.66rem; font-weight: 700;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--green-bright);
+      background: rgba(34,197,94,0.1);
+      border: 1px solid rgba(34,197,94,0.22);
+      padding: 4px 12px; border-radius: 20px;
+      margin-bottom: 18px;
+    }
+    .side-card h3 {
+      font-size: 1.15rem; font-weight: 700;
+      color: var(--white); margin-bottom: 16px;
+      letter-spacing: -0.015em;
+    }
+    .side-list { list-style: none; }
+    .side-list li {
+      font-size: 0.88rem; color: var(--gray);
+      line-height: 1.6; padding-left: 26px;
+      position: relative; margin-bottom: 12px;
+    }
+    .side-list li:last-child { margin-bottom: 0; }
+    .side-list li::before {
+      content: "";
+      position: absolute;
+      left: 4px; top: 0.62em;
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--green-bright);
+      box-shadow: 0 0 8px rgba(34,197,94,0.5);
+    }
+    .sides-note {
+      margin-top: 20px;
+      background: var(--green-dark);
+      border: 1px solid rgba(34,197,94,0.22);
+      border-radius: 14px;
+      padding: 22px 26px;
+      text-align: center;
+    }
+    .sides-note strong { color: var(--white); font-weight: 700; }
+    .sides-note p { font-size: 0.9rem; color: var(--gray); line-height: 1.65; }
+
+    /* ── FEATURES ───────────────────────────────────────────── */
+    .features-section { padding: 110px 0; }
+    .features-header { margin-bottom: 56px; text-align: center; }
+    .features-header .section-sub { margin: 0 auto; }
+    .features-grid {
+      display: flex; flex-wrap: wrap; justify-content: center; gap: 14px;
+    }
+    .feat-card {
+      flex: 1 1 300px; max-width: 357px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px; padding: 28px 24px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .feat-card:hover {
+      border-color: rgba(34,197,94,0.3);
+      transform: translateY(-2px);
+    }
+    .feat-emoji { font-size: 1.65rem; margin-bottom: 14px; display: block; }
+    .feat-card h3 {
+      font-size: 0.96rem; font-weight: 700;
+      color: var(--white); margin-bottom: 8px;
+    }
+    .feat-card p { font-size: 0.85rem; color: var(--gray); line-height: 1.65; }
+
+    /* ── PRICING ────────────────────────────────────────────── */
+    .pricing-section {
+      padding: 110px 0;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .pricing-header { margin-bottom: 56px; text-align: center; }
+    .pricing-header .section-sub { margin: 0 auto; }
+    .pricing-grid {
+      display: flex; flex-wrap: wrap; justify-content: center;
+      gap: 16px; max-width: 720px; margin: 0 auto;
+    }
+    .pricing-card {
+      flex: 1 1 320px; max-width: 352px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px 28px;
+      position: relative;
+      transition: border-color 0.2s;
+    }
+    .pricing-card:hover { border-color: rgba(255,255,255,0.18); }
+    .pricing-card.popular {
+      border: 2px solid var(--green);
+      background: linear-gradient(180deg, var(--green-dark) 0%, var(--bg) 100%);
+    }
+    .popular-badge {
+      position: absolute;
+      top: -12px; left: 50%;
+      transform: translateX(-50%);
+      background: var(--green);
+      color: #FFF;
+      font-size: 0.65rem; font-weight: 700;
+      letter-spacing: 0.1em;
+      padding: 4px 14px; border-radius: 999px;
+    }
+    .pricing-name {
+      font-size: 0.74rem; font-weight: 700;
+      color: var(--gray-dim);
+      letter-spacing: 0.14em; text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .pricing-price {
+      margin-bottom: 8px;
+    }
+    .pricing-price-num {
+      font-size: 2.6rem; font-weight: 800;
+      color: var(--white); letter-spacing: -0.02em;
+    }
+    .pricing-price-period {
+      color: var(--gray-dim); font-size: 0.9rem;
+    }
+    .pricing-tagline {
+      font-size: 0.88rem; color: var(--gray);
+      line-height: 1.55;
+      padding-top: 16px;
+      margin-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+    .pricing-note {
+      text-align: center;
+      color: var(--gray-dim);
+      font-size: 0.88rem;
+      margin-top: 36px;
+    }
+
+    /* ── WAITLIST ───────────────────────────────────────────── */
+    .waitlist-section {
+      padding: 110px 0;
+      background: var(--green-dark);
+      text-align: center;
+    }
+    .waitlist-section .section-sub { margin: 14px auto 38px; color: rgba(255,255,255,0.65); }
+    .waitlist-form { max-width: 460px; margin: 0 auto; }
+    .form-row { display: flex; gap: 8px; }
+    .form-row input[type="email"] {
+      flex: 1;
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 8px; padding: 14px 16px;
+      font-size: 0.92rem; color: var(--white);
+      background: rgba(255,255,255,0.08);
+      outline: none; font-family: inherit;
+      transition: border-color 0.15s;
+    }
+    .form-row input[type="email"]::placeholder { color: rgba(255,255,255,0.32); }
+    .form-row input[type="email"]:focus { border-color: rgba(255,255,255,0.55); }
+    .btn-white {
+      background: var(--white); color: #000;
+      border: none; border-radius: 8px;
+      padding: 14px 22px; font-size: 0.9rem; font-weight: 700;
+      cursor: pointer; white-space: nowrap; font-family: inherit;
+      transition: background 0.15s, transform 0.15s;
+    }
+    .btn-white:hover { background: #EBEBEB; transform: translateY(-1px); }
+    .btn-white:disabled { opacity: 0.5; cursor: not-allowed; }
+    .form-msg {
+      font-size: 14px; font-weight: 600;
+      margin-top: 14px;
+      min-height: 20px;
+    }
+    .form-msg.success { color: var(--green-soft); }
+    .form-msg.error   { color: #F87171; }
+    .waitlist-success {
+      max-width: 460px; margin: 0 auto;
+      background: rgba(34,197,94,0.08);
+      border: 1px solid rgba(34,197,94,0.3);
+      border-radius: 10px;
+      padding: 20px 24px;
+      color: var(--green-soft);
+      font-size: 1rem; font-weight: 600;
+    }
+
+    /* ── FOOTER ─────────────────────────────────────────────── */
+    footer {
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      padding: 40px 0 28px;
+    }
+    .footer-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 20px;
+    }
+    .footer-left { display: flex; align-items: center; gap: 12px; }
+    .footer-tagline {
+      font-size: 13px; color: var(--gray-dim);
+    }
+    .footer-email {
+      font-size: 13px; color: var(--gray);
+      text-decoration: none; transition: color 0.15s;
+    }
+    .footer-email:hover { color: var(--green-bright); }
+    .footer-copy { font-size: 12px; color: var(--gray-dim); }
+
+    /* ── REVEAL ─────────────────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .d1 { transition-delay: 0.07s; }
+    .d2 { transition-delay: 0.14s; }
+    .d3 { transition-delay: 0.21s; }
+    .d4 { transition-delay: 0.28s; }
+    .d5 { transition-delay: 0.35s; }
+
+    /* ── MOBILE ─────────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .nav-links { gap: 14px; }
+      .nav-links a:not(.btn-signin) { display: none; }
+      .container { padding: 0 18px; }
+      .hero { padding: 72px 0 60px; min-height: auto; }
+      .hero h1 { font-size: 36px; }
+      .hero-sub { font-size: 15px; }
+      .steps-grid,
+      .sides-grid { grid-template-columns: 1fr; }
+      .features-grid, .pricing-grid { max-width: 100%; }
+      .feat-card, .pricing-card { flex-basis: 100%; max-width: 100%; }
+      .side-card { padding: 26px 22px; }
+      .step-card {
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+        padding: 28px 20px;
+      }
+      .step-card:last-child { border-bottom: none; }
+      .form-row { flex-direction: column; gap: 10px; }
+      .form-row input[type="email"] { width: 100%; }
+      .btn-white { width: 100%; }
+      .how-section, .features-section, .sides-section,
+      .pricing-section, .waitlist-section { padding: 68px 0; }
+      .footer-inner { flex-direction: column; gap: 8px; text-align: center; }
+    }
+  </style>
+</head>
+<body class="no-scroll">
+
+  <!-- INTRO SCREEN -->
+  <div id="intro-screen">
+    <svg class="intro-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+      <rect width="512" height="512" rx="114" fill="#1B5E3B"/>
+      <rect x="141" y="96" width="230" height="320" rx="20" fill="white" opacity="0.12"/>
+      <rect x="141" y="96" width="230" height="320" rx="20" fill="none" stroke="white" stroke-width="8" opacity="0.5"/>
+      <rect x="176" y="152" width="160" height="16" rx="8" fill="white" opacity="0.95"/>
+      <rect x="176" y="192" width="120" height="16" rx="8" fill="white" opacity="0.6"/>
+      <rect x="176" y="232" width="140" height="16" rx="8" fill="white" opacity="0.6"/>
+      <rect x="176" y="272" width="100" height="16" rx="8" fill="white" opacity="0.6"/>
+      <circle cx="256" cy="360" r="72" fill="#154D30"/>
+      <path d="M224 360 L244 380 L292 320" fill="none" stroke="white"
+        stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+
+  <!-- NAV -->
+  <nav id="main-nav">
+    <div class="container nav-inner">
+      <a class="nav-logo" href="#top">
+        <span class="nav-logo-dot"></span>
+        <span class="nav-logo-text">CloseKit</span>
+      </a>
+      <div class="nav-links">
+        <a href="#how">How it works</a>
+        <a href="#sides">Both sides</a>
+        <a href="#features">Features</a>
+        <a href="#pricing">Pricing</a>
+        <a class="btn-signin" href="https://real-estate-agent-ido8hifsinsgnn4wjbayuw.streamlit.app/?mode=signin" target="_blank" rel="noopener">Sign In</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="top">
+    <div class="hero-glow"></div>
+    <div class="hero-content">
+      <div class="hero-badge">Now in Beta</div>
+      <h1>Real estate paperwork,<br><span class="green" id="typed-text"></span><span class="typed-cursor" id="typed-cursor"></span></h1>
+      <p class="hero-sub">
+        Represent the seller, the buyer, or both. CloseKit builds the forms
+        from your deal's real terms, collects every signature, and tracks
+        the transaction through to closing.
+      </p>
+      <a href="#waitlist" class="btn-primary">Join the Waitlist</a>
+      <p class="hero-mini-note">Limited beta access. Approval required.</p>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how-section" id="how">
+    <div class="container">
+      <div class="how-header reveal">
+        <div class="section-label">How It Works</div>
+        <h2 class="section-headline">Three steps, whichever side you're on.</h2>
+      </div>
+      <div class="steps-grid">
+        <div class="step-card reveal">
+          <span class="step-num-big">01</span>
+          <h3>Tell CloseKit who you represent</h3>
+          <p>Seller, buyer, or both. The workflow, the documents, and the signing order all adapt from there.</p>
+        </div>
+        <div class="step-card reveal d1">
+          <span class="step-num-big">02</span>
+          <h3>Enter the deal once</h3>
+          <p>Property, parties, price, financing, deadlines — then CloseKit fills the Florida Realtors forms that apply to your side of it.</p>
+        </div>
+        <div class="step-card reveal d2">
+          <span class="step-num-big">03</span>
+          <h3>Send for digital signing</h3>
+          <p>Buyers and sellers sign from any phone with a single tap. No printing, no apps to install.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOTH SIDES -->
+  <section class="sides-section" id="sides">
+    <div class="container">
+      <div class="sides-header reveal">
+        <div class="section-label">Both Sides</div>
+        <h2 class="section-headline">One tool for the whole transaction.</h2>
+        <p class="section-sub">Most paperwork tools assume you're the listing agent. CloseKit doesn't — it runs the side of the deal you're actually on.</p>
+      </div>
+      <div class="sides-grid">
+        <div class="side-card reveal">
+          <span class="side-tag">Listing side</span>
+          <h3>Take the listing to market</h3>
+          <ul class="side-list">
+            <li>Listing agreement and seller property disclosure, filled and sent for signature.</li>
+            <li>Flood, lead-based paint, HOA, and HOPA disclosures — whichever the property calls for.</li>
+            <li>Co-sellers sign too. A document isn't done until every seller on it has signed.</li>
+            <li>When the offer arrives from the buyer's agent, the contract joins the same file.</li>
+          </ul>
+        </div>
+        <div class="side-card reveal d1">
+          <span class="side-tag">Buyer side</span>
+          <h3>Write the offer, not just file it</h3>
+          <ul class="side-list">
+            <li>FAR/BAR built from your actual terms — price, financing, deposit, deadlines.</li>
+            <li>Countered? Update the terms and the contract regenerates. Signed documents are never altered.</li>
+            <li>Contract and applicable addenda go out as one signing package, in one session.</li>
+            <li>Co-buyers are full signers, with the same audit trail as everyone else.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="sides-note reveal d2">
+        <p><strong>Representing both parties?</strong> Pick dual agency at setup and CloseKit runs both tracks on a single transaction — one file, one timeline, every signature in one place.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="features-section" id="features">
+    <div class="container">
+      <div class="features-header reveal">
+        <div class="section-label">Everything You Need</div>
+        <h2 class="section-headline">Built for how agents actually work.</h2>
+        <p class="section-sub">Every feature designed around the real lifecycle of a Florida real-estate deal.</p>
+      </div>
+      <div class="features-grid">
+        <div class="feat-card reveal">
+          <span class="feat-emoji">📄</span>
+          <h3>Auto-Filling Forms</h3>
+          <p>Florida Realtors forms, filled from the deal you already entered — and mapped to your account.</p>
+        </div>
+        <div class="feat-card reveal d1">
+          <span class="feat-emoji">✍️</span>
+          <h3>Digital Signing</h3>
+          <p>Clients sign from any phone with a single tap. Every signature timestamped and IP-logged.</p>
+        </div>
+        <div class="feat-card reveal d2">
+          <span class="feat-emoji">📋</span>
+          <h3>Phase Tracker</h3>
+          <p>Seven phases from listing to closed, each with its own checklist — nothing slips through.</p>
+        </div>
+        <div class="feat-card reveal d1">
+          <span class="feat-emoji">⏰</span>
+          <h3>Deadline Reminders</h3>
+          <p>Email alerts ahead of inspection, financing, and closing deadlines — while there's still time to act.</p>
+        </div>
+        <div class="feat-card reveal d3">
+          <span class="feat-emoji">📨</span>
+          <h3>Send to Title</h3>
+          <p>The executed contract and full document package, emailed to your title company in one action.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section class="pricing-section" id="pricing">
+    <div class="container">
+      <div class="pricing-header reveal">
+        <div class="section-label">Pricing</div>
+        <h2 class="section-headline">Simple. Per-agent. Cancel anytime.</h2>
+        <p class="section-sub">Save hours on every transaction. The plan pays for itself on deal one.</p>
+      </div>
+      <div class="pricing-grid">
+        <div class="pricing-card reveal">
+          <div class="pricing-name">Starter</div>
+          <div class="pricing-price">
+            <span class="pricing-price-num">$59</span>
+            <span class="pricing-price-period">/month</span>
+          </div>
+          <p class="pricing-tagline">Up to 3 active transactions. Perfect for new and part-time agents.</p>
+        </div>
+        <div class="pricing-card popular reveal d1">
+          <div class="popular-badge">MOST POPULAR</div>
+          <div class="pricing-name">Pro</div>
+          <div class="pricing-price">
+            <span class="pricing-price-num">$99</span>
+            <span class="pricing-price-period">/month</span>
+          </div>
+          <p class="pricing-tagline">Unlimited transactions, the full seven-phase lifecycle, and every CloseKit feature. For full-time agents.</p>
+        </div>
+      </div>
+      <p class="pricing-note">Beta access available. Pricing locks when you join.</p>
+    </div>
+  </section>
+
+  <!-- WAITLIST -->
+  <section class="waitlist-section" id="waitlist">
+    <div class="container">
+      <div class="reveal">
+        <div class="section-label">Waitlist</div>
+        <h2 class="section-headline">Get early access.</h2>
+        <p class="section-sub">
+          We're approving new agents on a rolling basis. Drop your email
+          and we'll be in touch soon.
+        </p>
+      </div>
+      <div class="reveal d1" id="waitlist-wrap">
+        <div class="waitlist-form" id="waitlist-form">
+          <div class="form-row">
+            <input type="email" id="waitlist-email" placeholder="you@example.com" autocomplete="email" />
+            <button class="btn-white" id="waitlist-btn" onclick="submitWaitlist()">Join Waitlist</button>
+          </div>
+          <div class="form-msg" id="waitlist-msg"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-left">
+          <span class="nav-logo-dot"></span>
+          <span class="nav-logo-text">CloseKit</span>
+          <span class="footer-tagline">— Real estate paperwork, handled.</span>
+        </div>
+        <a class="footer-email" href="mailto:tristan@closekit.us">tristan@closekit.us</a>
+        <span class="footer-copy">© 2026 CloseKit</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    /* ── Public config (anon key is safe to expose) ─────────── */
+    const SUPABASE_URL = 'https://kqczmakowkkluaxsxsfv.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_AtRmMcahTiBJPRnhKSlfww_rHDMTxq8';
+    const WAITLIST_FN_URL = SUPABASE_URL + '/functions/v1/waitlist';
+
+    /* ── Intro sequence ─────────────────────────────────────── */
+    const introScreen = document.getElementById('intro-screen');
+    const introIcon   = introScreen.querySelector('.intro-icon');
+    const nav         = document.getElementById('main-nav');
+
+    requestAnimationFrame(() => {
+      setTimeout(() => introIcon.classList.add('show'), 80);
+    });
+
+    setTimeout(() => {
+      introScreen.classList.add('fade-out');
+      nav.classList.add('show');
+      document.body.classList.remove('no-scroll');
+      setTimeout(() => {
+        introScreen.style.display = 'none';
+        startTypewriter();
+      }, 700);
+    }, 1400);
+
+    /* ── Typewriter on "Handled." ───────────────────────────── */
+    function startTypewriter() {
+      const el     = document.getElementById('typed-text');
+      const cursor = document.getElementById('typed-cursor');
+      const word   = 'handled.';
+      let i = 0;
+      function tick() {
+        if (i <= word.length) {
+          el.textContent = word.slice(0, i++);
+          setTimeout(tick, 78);
+        } else {
+          setTimeout(() => { cursor.style.display = 'none'; }, 1400);
+        }
+      }
+      setTimeout(tick, 250);
+    }
+
+    /* ── Scroll reveal ──────────────────────────────────────── */
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+    /* ── Waitlist submit ────────────────────────────────────── */
+    async function submitWaitlist() {
+      const emailEl = document.getElementById('waitlist-email');
+      const msgEl   = document.getElementById('waitlist-msg');
+      const btn     = document.getElementById('waitlist-btn');
+      const wrap    = document.getElementById('waitlist-wrap');
+      const email   = emailEl.value.trim();
+
+      msgEl.textContent = '';
+      msgEl.className = 'form-msg';
+
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        msgEl.textContent = 'Please enter a valid email address.';
+        msgEl.classList.add('error');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+
+      try {
+        // Primary: Edge Function (saves to DB + sends confirmation email)
+        const res = await fetch(WAITLIST_FN_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+            'apikey': SUPABASE_ANON_KEY,
+          },
+          body: JSON.stringify({ email }),
+        });
+
+        if (res.ok) {
+          wrap.innerHTML =
+            '<div class="waitlist-success">' +
+            '✅ You\'re on the list. Check your inbox.' +
+            '</div>';
+          return;
+        }
+
+        // Fallback: if the Edge Function isn't deployed (404),
+        // do a direct REST insert so the email is at least captured.
+        if (res.status === 404) {
+          const fb = await fetch(SUPABASE_URL + '/rest/v1/waitlist', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+              'apikey': SUPABASE_ANON_KEY,
+              'Prefer': 'return=minimal',
+            },
+            body: JSON.stringify({ email }),
+          });
+          if (fb.ok || fb.status === 201) {
+            wrap.innerHTML =
+              '<div class="waitlist-success">' +
+              '✅ You\'re on the list. We\'ll be in touch soon.' +
+              '</div>';
+            return;
+          }
+        }
+
+        throw new Error('HTTP ' + res.status);
+      } catch (err) {
+        msgEl.textContent = 'Something went wrong. Please try again or email tristan@closekit.us.';
+        msgEl.classList.add('error');
+        btn.disabled = false;
+        btn.textContent = 'Join Waitlist';
+      }
+    }
+
+    document.getElementById('waitlist-email').addEventListener('keydown', e => {
+      if (e.key === 'Enter') submitWaitlist();
+    });
+
+    /* ── Service worker (PWA) ───────────────────────────────── */
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').catch(() => {});
+    }
+  </script>
+
+</body>
+</html>
