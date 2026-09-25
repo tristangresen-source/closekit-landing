@@ -123,6 +123,20 @@
       background: var(--green-bright); color: #000;
       transform: translateY(-1px);
     }
+    /* Create Account is the filled button and Sign In the outline, because
+       a visitor who has never heard of CloseKit is the one we want to catch.
+       Someone who already has an account will find a sign-in link anywhere. */
+    .btn-signup {
+      background: var(--green-bright); color: #000;
+      border: 1px solid var(--green-bright); border-radius: 8px;
+      padding: 9px 18px; font-size: 0.85rem; font-weight: 700;
+      text-decoration: none; margin-left: 8px;
+      transition: filter 0.15s, transform 0.15s;
+    }
+    .btn-signup:hover {
+      filter: brightness(1.1);
+      transform: translateY(-1px);
+    }
 
     /* ── HERO ───────────────────────────────────────────────── */
     .hero {
@@ -453,7 +467,10 @@
     /* ── MOBILE ─────────────────────────────────────────────── */
     @media (max-width: 768px) {
       .nav-links { gap: 14px; }
-      .nav-links a:not(.btn-signin) { display: none; }
+      /* Section links collapse on narrow screens; both account buttons stay,
+         or the page loses its only call to action on a phone. */
+      .nav-links a:not(.btn-signin):not(.btn-signup) { display: none; }
+      .btn-signup { margin-left: 6px; padding: 8px 12px; }
       .container { padding: 0 18px; }
       .hero { padding: 72px 0 60px; min-height: auto; }
       .hero h1 { font-size: 36px; }
@@ -508,7 +525,8 @@
         <a href="#sides">Both sides</a>
         <a href="#features">Features</a>
         <a href="#pricing">Pricing</a>
-        <a class="btn-signin" href="https://real-estate-agent-ido8hifsinsgnn4wjbayuw.streamlit.app/?mode=signin" target="_blank" rel="noopener">Sign In</a>
+        <a class="btn-signin" href="https://app.closekit.us/?mode=signin" target="_blank" rel="noopener">Sign In</a>
+        <a class="btn-signup" href="https://app.closekit.us/?mode=signup" target="_blank" rel="noopener">Create Account</a>
       </div>
     </div>
   </nav>
