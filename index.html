@@ -32,7 +32,16 @@
         "name": "CloseKit",
         "url": "https://closekit.us/",
         "email": "tristan@closekit.us",
-        "logo": "https://closekit.us/icon.svg"
+        "logo": "https://closekit.us/icon.svg",
+        "telephone": "+1-727-648-6904",
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "contactType": "customer support",
+          "email": "tristan@closekit.us",
+          "telephone": "+1-727-648-6904",
+          "areaServed": "US",
+          "availableLanguage": "English"
+        }
       },
       {
         "@type": "SoftwareApplication",
@@ -115,7 +124,7 @@
             "name": "Does CloseKit offer plans for brokerages and teams?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Starter and Pro are individual agent plans today. CloseKit is looking for brokerages and teams to work with, in Florida and beyond, and brokerage plans are in development. Brokerages can reach us at <a href=\"mailto:tristan@closekit.us\">tristan@closekit.us<\/a>."
+              "text": "Starter and Pro are individual agent plans today. CloseKit is looking for brokerages and teams to work with, in Florida and beyond, and brokerage plans are in development. Brokerages can reach us at <a href=\"mailto:tristan@closekit.us\">tristan@closekit.us<\/a> or <a href=\"tel:+17276486904\">(727) 648-6904<\/a>."
             }
           },
           {
@@ -179,7 +188,7 @@
             "name": "Does CloseKit work outside Florida?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Not yet. CloseKit currently supports Florida real estate forms only. We're open to working with agents and brokerages outside Florida and plan to expand to other states. If you work in another state, join the waitlist or email <a href=\"mailto:tristan@closekit.us\">tristan@closekit.us<\/a> and tell us where you are."
+              "text": "Not yet. CloseKit currently supports Florida real estate forms only. We're open to working with agents and brokerages outside Florida and plan to expand to other states. If you work in another state, join the waitlist, email <a href=\"mailto:tristan@closekit.us\">tristan@closekit.us<\/a> or call <a href=\"tel:+17276486904\">(727) 648-6904<\/a>, and tell us where you are."
             }
           },
           {
@@ -378,7 +387,7 @@
         </div>
       </div>
       <p class="pricing-note">Beta access available. Pricing locks when you join.</p>
-      <p class="pricing-note pricing-note-more">Running a brokerage or team, or working outside Florida? Brokerage plans are in development. <a href="mailto:tristan@closekit.us?subject=Working%20with%20CloseKit">Get in touch</a>.</p>
+      <p class="pricing-note pricing-note-more">Running a brokerage or team, or working outside Florida? Brokerage plans are in development. <a href="mailto:tristan@closekit.us?subject=Working%20with%20CloseKit">Get in touch</a> or call <a href="tel:+17276486904">(727) 648-6904</a>.</p>
     </div>
   </section>
 
@@ -400,7 +409,7 @@
         </details>
         <details class="faq-item">
           <summary>Does CloseKit offer plans for brokerages and teams?</summary>
-          <p>Starter and Pro are individual agent plans today. CloseKit is looking for brokerages and teams to work with, in Florida and beyond, and brokerage plans are in development. Brokerages can reach us at <a href="mailto:tristan@closekit.us">tristan@closekit.us</a>.</p>
+          <p>Starter and Pro are individual agent plans today. CloseKit is looking for brokerages and teams to work with, in Florida and beyond, and brokerage plans are in development. Brokerages can reach us at <a href="mailto:tristan@closekit.us">tristan@closekit.us</a> or <a href="tel:+17276486904">(727) 648-6904</a>.</p>
         </details>
         <details class="faq-item">
           <summary>Which forms does CloseKit fill?</summary>
@@ -432,7 +441,7 @@
         </details>
         <details class="faq-item">
           <summary>Does CloseKit work outside Florida?</summary>
-          <p>Not yet. CloseKit currently supports Florida real estate forms only. We're open to working with agents and brokerages outside Florida and plan to expand to other states. If you work in another state, join the waitlist or email <a href="mailto:tristan@closekit.us">tristan@closekit.us</a> and tell us where you are.</p>
+          <p>Not yet. CloseKit currently supports Florida real estate forms only. We're open to working with agents and brokerages outside Florida and plan to expand to other states. If you work in another state, join the waitlist, email <a href="mailto:tristan@closekit.us">tristan@closekit.us</a> or call <a href="tel:+17276486904">(727) 648-6904</a>, and tell us where you are.</p>
         </details>
         <details class="faq-item">
           <summary>How do I get access?</summary>
@@ -449,16 +458,17 @@
         <div class="section-label">Waitlist</div>
         <h2 class="section-headline">Get early access.</h2>
         <p class="section-sub">
-          We're approving new agents on a rolling basis. Drop your email
-          and we'll be in touch soon.
+          We're approving new agents on a rolling basis. Drop your email,
+          add your phone number if you'd like a call, and we'll be in touch soon.
         </p>
       </div>
       <div class="reveal d1" id="waitlist-wrap">
         <div class="waitlist-form" id="waitlist-form">
           <div class="form-row">
-            <input type="email" id="waitlist-email" placeholder="you@example.com" autocomplete="email" />
-            <button class="btn-white" id="waitlist-btn" onclick="submitWaitlist()">Join Waitlist</button>
+            <input type="email" id="waitlist-email" placeholder="you@example.com" autocomplete="email" aria-label="Email" />
+            <input type="tel" id="waitlist-phone" placeholder="Phone (optional)" autocomplete="tel" aria-label="Phone number (optional)" />
           </div>
+          <button class="btn-white waitlist-submit" id="waitlist-btn" onclick="submitWaitlist()">Join Waitlist</button>
           <div class="form-msg" id="waitlist-msg"></div>
         </div>
       </div>
@@ -478,7 +488,10 @@
           <a href="/compare/">Compare</a>
           <a href="/faq/">FAQ</a>
         </div>
-        <a class="footer-email" href="mailto:tristan@closekit.us">tristan@closekit.us</a>
+        <div class="footer-contact">
+          <a class="footer-email" href="mailto:tristan@closekit.us">tristan@closekit.us</a>
+          <a class="footer-email" href="tel:+17276486904">(727) 648-6904</a>
+        </div>
         <span class="footer-copy">© 2026 CloseKit</span>
       </div>
     </div>
@@ -540,16 +553,26 @@
     /* ── Waitlist submit ────────────────────────────────────── */
     async function submitWaitlist() {
       const emailEl = document.getElementById('waitlist-email');
+      const phoneEl = document.getElementById('waitlist-phone');
       const msgEl   = document.getElementById('waitlist-msg');
       const btn     = document.getElementById('waitlist-btn');
       const wrap    = document.getElementById('waitlist-wrap');
       const email   = emailEl.value.trim();
+      const phone   = phoneEl.value.trim();
 
       msgEl.textContent = '';
       msgEl.className = 'form-msg';
 
       if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
         msgEl.textContent = 'Please enter a valid email address.';
+        msgEl.classList.add('error');
+        return;
+      }
+
+      // Phone is optional. Same check as the Edge Function: 7-15 digits.
+      const digits = phone.replace(/\D/g, '');
+      if (phone && (!/^[0-9+().\-\s]+$/.test(phone) || digits.length < 7 || digits.length > 15)) {
+        msgEl.textContent = 'Please enter a valid phone number, or leave it blank.';
         msgEl.classList.add('error');
         return;
       }
@@ -566,7 +589,7 @@
             'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
             'apikey': SUPABASE_ANON_KEY,
           },
-          body: JSON.stringify({ email }),
+          body: JSON.stringify({ email, phone }),
         });
 
         if (res.ok) {
@@ -588,7 +611,7 @@
               'apikey': SUPABASE_ANON_KEY,
               'Prefer': 'return=minimal',
             },
-            body: JSON.stringify({ email }),
+            body: JSON.stringify({ email, phone }),
           });
           if (fb.ok || fb.status === 201) {
             wrap.innerHTML =
@@ -601,16 +624,17 @@
 
         throw new Error('HTTP ' + res.status);
       } catch (err) {
-        msgEl.textContent = 'Something went wrong. Please try again or email tristan@closekit.us.';
+        msgEl.textContent = 'Something went wrong. Please try again, email tristan@closekit.us, or call (727) 648-6904.';
         msgEl.classList.add('error');
         btn.disabled = false;
         btn.textContent = 'Join Waitlist';
       }
     }
 
-    document.getElementById('waitlist-email').addEventListener('keydown', e => {
-      if (e.key === 'Enter') submitWaitlist();
-    });
+    ['waitlist-email', 'waitlist-phone'].forEach(id =>
+      document.getElementById(id).addEventListener('keydown', e => {
+        if (e.key === 'Enter') submitWaitlist();
+      }));
 
     /* ── Service worker (PWA) ───────────────────────────────── */
     if ('serviceWorker' in navigator) {

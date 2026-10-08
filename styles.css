@@ -378,8 +378,8 @@ nav {
 .waitlist-section .section-sub { margin: 14px auto 38px; color: rgba(255,255,255,0.65); }
 .waitlist-form { max-width: 460px; margin: 0 auto; }
 .form-row { display: flex; gap: 8px; }
-.form-row input[type="email"] {
-  flex: 1;
+.form-row input {
+  flex: 1; min-width: 0;
   border: 1px solid rgba(255,255,255,0.18);
   border-radius: 8px; padding: 14px 16px;
   font-size: 0.92rem; color: var(--white);
@@ -387,8 +387,8 @@ nav {
   outline: none; font-family: inherit;
   transition: border-color 0.15s;
 }
-.form-row input[type="email"]::placeholder { color: rgba(255,255,255,0.32); }
-.form-row input[type="email"]:focus { border-color: rgba(255,255,255,0.55); }
+.form-row input::placeholder { color: rgba(255,255,255,0.32); }
+.form-row input:focus { border-color: rgba(255,255,255,0.55); }
 .btn-white {
   background: var(--white); color: #000;
   border: none; border-radius: 8px;
@@ -472,7 +472,7 @@ footer {
   }
   .step-card:last-child { border-bottom: none; }
   .form-row { flex-direction: column; gap: 10px; }
-  .form-row input[type="email"] { width: 100%; }
+  .form-row input { width: 100%; }
   .btn-white { width: 100%; }
   .how-section, .features-section, .sides-section,
   .pricing-section, .waitlist-section { padding: 68px 0; }
@@ -621,3 +621,9 @@ footer {
 /* Second pricing note: brokerages, teams, and agents outside Florida. */
 .pricing-note-more { margin-top: 8px; }
 .pricing-note a { color: var(--green-bright); }
+
+/* Waitlist: email and phone side by side, the button full width under them. */
+.waitlist-submit { width: 100%; margin-top: 8px; }
+
+/* Footer: email and phone together. */
+.footer-contact { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }

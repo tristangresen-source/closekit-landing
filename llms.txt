@@ -30,13 +30,13 @@
 
 - CloseKit currently supports Florida real estate forms only.
 - CloseKit is open to working with agents and brokerages outside Florida; expansion to other states is planned.
-- CloseKit is looking to work with brokerages and teams; brokerage plans are in development. Contact tristan@closekit.us.
+- CloseKit is looking to work with brokerages and teams; brokerage plans are in development. Contact tristan@closekit.us or (727) 648-6904.
 - Agents review all documents before sending them for signature; CloseKit fills forms and does not guarantee legal correctness.
 
 ## Company
 
 - CloseKit is independently built and owned.
-- Contact: tristan@closekit.us
+- Contact: tristan@closekit.us or (727) 648-6904
 
 ## Pages
 
