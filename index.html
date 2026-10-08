@@ -459,7 +459,8 @@
         <h2 class="section-headline">Get early access.</h2>
         <p class="section-sub">
           We're approving new agents on a rolling basis. Drop your email,
-          add your phone number if you'd like a call, and we'll be in touch soon.
+          add your phone number if you'd like a call, tell us anything you'd
+          like us to know, and we'll be in touch soon.
         </p>
       </div>
       <div class="reveal d1" id="waitlist-wrap">
@@ -468,6 +469,7 @@
             <input type="email" id="waitlist-email" placeholder="you@example.com" autocomplete="email" aria-label="Email" />
             <input type="tel" id="waitlist-phone" placeholder="Phone (optional)" autocomplete="tel" aria-label="Phone number (optional)" />
           </div>
+          <textarea id="waitlist-note" class="waitlist-note" rows="3" maxlength="1000" placeholder="Anything you'd like us to know? (optional)" aria-label="Note (optional)"></textarea>
           <button class="btn-white waitlist-submit" id="waitlist-btn" onclick="submitWaitlist()">Join Waitlist</button>
           <div class="form-msg" id="waitlist-msg"></div>
         </div>
@@ -554,11 +556,13 @@
     async function submitWaitlist() {
       const emailEl = document.getElementById('waitlist-email');
       const phoneEl = document.getElementById('waitlist-phone');
+      const noteEl  = document.getElementById('waitlist-note');
       const msgEl   = document.getElementById('waitlist-msg');
       const btn     = document.getElementById('waitlist-btn');
       const wrap    = document.getElementById('waitlist-wrap');
       const email   = emailEl.value.trim();
       const phone   = phoneEl.value.trim();
+      const note    = noteEl.value.trim().slice(0, 1000);
 
       msgEl.textContent = '';
       msgEl.className = 'form-msg';
@@ -589,7 +593,7 @@
             'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
             'apikey': SUPABASE_ANON_KEY,
           },
-          body: JSON.stringify({ email, phone }),
+          body: JSON.stringify({ email, phone, note }),
         });
 
         if (res.ok) {
@@ -611,7 +615,7 @@
               'apikey': SUPABASE_ANON_KEY,
               'Prefer': 'return=minimal',
             },
-            body: JSON.stringify({ email, phone }),
+            body: JSON.stringify({ email, phone, note }),
           });
           if (fb.ok || fb.status === 201) {
             wrap.innerHTML =
