@@ -1,5 +1,5 @@
-const CACHE = "closekit-v2";
-const ASSETS = ["/", "/index.html", "/icon.svg"];
+const CACHE = "closekit-v3";
+const ASSETS = ["/", "/index.html", "/styles.css", "/icon.svg"];
 
 self.addEventListener("install", e => {
   e.waitUntil(
@@ -19,7 +19,10 @@ self.addEventListener("fetch", e => {
   // HTML navigations: always try the network first, so a deploy is visible
   // on the very next visit instead of being masked by whatever was cached
   // on a visitor's first load. Cache is only the offline fallback.
-  if (e.request.mode === "navigate") {
+  // styles.css gets the same treatment: it is shared by every page now, and
+  // serving it cache-first would pair new HTML with a stale stylesheet.
+  const url = new URL(e.request.url);
+  if (e.request.mode === "navigate" || url.pathname === "/styles.css") {
     e.respondWith(
       fetch(e.request)
         .then(res => {

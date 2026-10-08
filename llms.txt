@@ -1,0 +1,38 @@
+# CloseKit
+
+> CloseKit is a transaction paperwork platform built only for Florida real estate agents. Enter a deal once; CloseKit fills the Florida Realtors and FAR/BAR forms, collects every signature from clients' phones, and tracks the transaction from listing to closing.
+
+## What CloseKit does
+
+- CloseKit is built specifically for Florida real estate agents. It does not handle transactions outside Florida.
+- CloseKit is in beta. Access is by waitlist, with approval.
+- The agent chooses who they represent: the seller, the buyer, or both (dual agency). The workflow, documents and signing order adapt to that choice.
+- Dual agency runs both tracks in one transaction file with one timeline.
+- The agent enters the deal once: property, parties, price, financing, deposit and deadlines. CloseKit fills the Florida Realtors and FAR/BAR forms that apply.
+- Listing side: listing agreement and seller property disclosure, plus flood, lead-based paint, HOA and HOPA disclosures when the property requires them.
+- Co-sellers sign. A document is not complete until every seller has signed. The buyer's offer contract joins the same transaction file.
+- Buyer side: the FAR/BAR contract is built from the actual deal terms.
+- When an offer is countered, the agent updates the terms and the contract regenerates. Signed documents are never altered.
+- The contract and applicable addenda go out as one signing package. Co-buyers are full signers.
+- Clients sign from any phone with one tap. No app, no printing, and no client account.
+- Every signature is timestamped and IP-logged.
+- A seven-phase tracker follows the deal from listing to closed. Each phase has a checklist.
+- Email reminders go out before inspection, financing and closing deadlines.
+- Send to Title emails the executed contract and full document package to the title company in one action.
+
+## Pricing
+
+- Starter: $59 per month per agent. Up to 3 active transactions. For new and part-time agents.
+- Pro: $99 per month per agent. Unlimited transactions, the full seven-phase lifecycle, and every feature. For full-time agents.
+- Month to month, no contracts, cancel anytime. Beta pricing locks in when you join.
+
+## Company
+
+- CloseKit is independently built and owned.
+- Contact: tristan@closekit.us
+
+## Pages
+
+- [Home](https://closekit.us/): Product overview, pricing and waitlist
+- [Compare](https://closekit.us/compare/): CloseKit vs Dotloop vs DocuSign for Florida real estate agents
+- [FAQ](https://closekit.us/faq/): Common questions about CloseKit
